@@ -1,0 +1,5 @@
+Create new Lab:
+ansible-playbook playbooks/aap2.yaml --ask-vault-pass
+
+Destroy lab
+ansible-playbook playbooks/aap2.yaml -e destroy=true --ask-vault-pass

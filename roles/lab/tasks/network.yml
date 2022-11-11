@@ -1,0 +1,16 @@
+- name: define network {{ network.name }}
+  virt_net:
+    command: define
+    autostart: yes
+    name: "{{ network.name }}"
+    xml: '{{ lookup("template", "templates/network.xml.j2") }}'
+
+- name: start network "{{ network.name }}"
+  virt_net:
+    command: create
+    name: "{{ network.name }}"
+
+- name: enable autostart for network
+  virt_net:
+    autostart: yes
+    name: "{{ network.name }}"

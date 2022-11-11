@@ -1,0 +1,51 @@
+---
+- name: configuring lab environment for tower and satellite
+  gather_facts: no
+  hosts:
+    - localhost
+  vars_files:
+    - ../vault/org.vault
+  vars:
+    network:
+      name: tower
+      startip: 192.168.100.1
+      netmask: 255.255.255.0
+    labhosts:
+      - name: controller
+        disksize: 200G
+        memory: 8192
+        cpu: 2
+        network: tower
+        macaddr: "52:54:00:01:50:02"
+        ipaddr: "192.168.100.2"
+      - name: satellite
+        disksize: 300G
+        memory: 20480
+        cpu: 2
+        network: tower
+        macaddr: "52:54:00:01:50:03"
+        ipaddr: "192.168.100.3"
+      - name: automationhub
+        network: tower
+        cpu: 2
+        memory: 8192
+        macaddr: "52:54:00:01:50:04"
+        ipaddr: "192.168.100.4"
+      - name: automationdb
+        cpu: 2
+        memory: 8192
+        network: tower
+        macaddr: "52:54:00:01:50:05"
+        ipaddr: "192.168.100.5"
+      - name: node03
+        network: tower
+        macaddr: "52:54:00:01:50:06"
+        ipaddr: "192.168.100.6"
+      - name: automationcatalog
+        cpu: 2
+        memory: 4096
+        network: tower
+        macaddr: "52:54:00:01:50:07"
+        ipaddr: "192.168.100.7"
+  roles:
+    - lab

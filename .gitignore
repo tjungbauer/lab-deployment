@@ -1,0 +1,4 @@
+/ansible-facts/
+ansible.log
+/vault/*
+inventory/*

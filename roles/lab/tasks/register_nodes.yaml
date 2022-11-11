@@ -1,0 +1,34 @@
+- name: Wait 600 seconds for bastion to become reachable/usable
+  delegate_to: "{{ item.ipaddr }}"
+  wait_for_connection:
+
+- name: Accept new SSH fingerprints for {{ item.name }}
+  shell: ssh-keyscan -H {{ item.ipaddr }} >> ~/.ssh/known_hosts
+
+- name: Register and Update Node {{ item.name }}
+  delegate_to: "{{ item.ipaddr }}"
+  block:
+    
+  - name: Register {{ item.name }} to RHN
+    redhat_subscription:
+      state: present
+      username: "{{ rhn_user }}"
+      password: "{{ rhn_pass }}"
+      auto_attach: true
+
+  - name: Upgrade OS of {{ item.name }} - This will take very long
+    yum:
+      name: '*'
+      state: latest
+    register: os_upgraded
+
+  - name: Reboot {{ item.name }}
+    reboot:
+    when: os_upgraded.changed
+
+  - name: Install additional packages onto {{ item.name }}
+    yum:
+      name: 
+        - vim
+        - tmux
+      state: present

@@ -1,0 +1,2 @@
+[{{ network.name }}]
+{{ item.name }} ansible_host={{ item.ipaddr }} ansible_ssh_common_args='-o StrictHostKeyChecking=no' # ansible_ssh_common_args='-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q root@{{ item.ipaddr }}"'

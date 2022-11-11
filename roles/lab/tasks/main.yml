@@ -1,0 +1,37 @@
+- name: Install local prerequisites
+  dnf:
+    name:
+      - sshpass
+      - tmux
+      - libguestfs-tools-c.x86_64
+      - haproxy
+    state: latest
+
+- name: Creating new LAB environement
+  block:
+  - name: creating network
+    include_tasks: network.yml
+    when: network is defined
+
+  - name: creating lab hosts
+    include_tasks: host.yml
+    with_items: "{{ labhosts }}"
+    when: labhosts is defined
+    
+  - name: Register Node
+    include_tasks: register_nodes.yaml
+    with_items: "{{ labhosts }}"
+    when: labhosts is defined
+  when: not destroy|bool
+
+- name: removing lab environment
+  block:
+  - name: removing hosts
+    include_tasks: remove_host.yml
+    with_items: "{{ labhosts }}"
+    when: labhosts is defined
+
+  - name: removing network
+    include_tasks: remove_network.yml
+    when: network is defined
+  when: destroy|bool
